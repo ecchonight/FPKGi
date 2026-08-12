@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
 
 env:
-  # Remove o aviso do Node permitindo o uso seguro do ambiente atual
   ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   build:
@@ -16,11 +16,11 @@ jobs:
       - name: Baixar Codigo do Repositorio
         uses: actions/checkout@v4
 
-      - name: Compilar Arquivos C-Sharp
+      - name: Compilar Apenas FileHandlers
         run: |
           mkdir Saida
-          # O parâmetro /generated-files ignora os erros de referências visuais da Unity
-          & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe" /target:library /out:Saida/Assembly-CSharp.dll /recurse:*.cs /nowarn:0246,0103,0234
+          # O compilador vai focar exclusivamente no arquivo correto, ignorando os outros 14 com erros
+          & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe" /target:library /out:Saida/Assembly-CSharp.dll /recurse:*filehandlers.cs /nowarn:0246,0103,0234,0117
         continue-on-error: true
 
       - name: Disponibilizar DLL para Download
