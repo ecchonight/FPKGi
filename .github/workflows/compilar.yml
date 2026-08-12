@@ -1,26 +1,27 @@
-name: Compilar FPKGi
+name: Compilar FPKGi Modificado
 
 on:
   push:
     branches: [ main, master ]
+  workflow_dispatch: # Ativa o botao manual na aba Actions
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
-      - name: Baixar Código
+      - name: Baixar Codigo do Repositorio
         uses: actions/checkout@v4
 
       - name: Configurar Compilador MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Compilar Apenas os Codigos .cs
+      - name: Compilar Arquivos C-Sharp
         run: |
           mkdir Saida
-          csc.exe /target:library /out:Saida/Assembly-CSharp.dll *.cs
+          csc.exe /target:library /out:Saida/Assembly-CSharp.dll /recurse:*.cs
         continue-on-error: true
 
-      - name: Baixar o Arquivo Pronto
+      - name: Disponibilizar DLL para Download
         uses: actions/upload-artifact@v4
         with:
           name: FPKGi-Modificado
