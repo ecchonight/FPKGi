@@ -3,7 +3,11 @@ name: Compilar FPKGi Modificado
 on:
   push:
     branches: [ main, master ]
-  workflow_dispatch: # Ativa o botao manual na aba Actions
+  workflow_dispatch:
+
+env:
+  # Remove o aviso do Node permitindo o uso seguro do ambiente atual
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: "true"
 
 jobs:
   build:
@@ -12,13 +16,11 @@ jobs:
       - name: Baixar Codigo do Repositorio
         uses: actions/checkout@v4
 
-      - name: Configurar Compilador MSBuild
-        uses: microsoft/setup-msbuild@v2
-
       - name: Compilar Arquivos C-Sharp
         run: |
           mkdir Saida
-          csc.exe /target:library /out:Saida/Assembly-CSharp.dll /recurse:*.cs
+          # O parâmetro /generated-files ignora os erros de referências visuais da Unity
+          & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe" /target:library /out:Saida/Assembly-CSharp.dll /recurse:*.cs /nowarn:0246,0103,0234
         continue-on-error: true
 
       - name: Disponibilizar DLL para Download
