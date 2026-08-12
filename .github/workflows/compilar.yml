@@ -1,0 +1,32 @@
+yamlname: Compilar FPKGi Modificado
+
+on:
+  push:
+    branches: [ main, master ] # Roda sempre que você salvar uma alteração
+
+jobs:
+  build:
+    name: Compilar Projeto Unity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Baixar Código
+        uses: actions/checkout@v4
+
+      - name: Ativar Cache da Unity
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-build
+
+      - name: Compilar DLL/Projeto
+        uses: game-ci/unity-builder@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }} # Se o projeto exigir licença
+        with:
+          targetPlatform: StandaloneWindows64 # Gera a DLL que precisamos
+
+      - name: Guardar Arquivo Compilado
+        uses: actions/upload-artifact@v4
+        with:
+          name: FPKGi-Modificado
+          path: Library/ScriptAssemblies/Assembly-CSharp.dll
