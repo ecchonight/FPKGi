@@ -1,4 +1,4 @@
-﻿/*
+/*
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -436,7 +436,7 @@ public class PngHandler
     {
         try
         {
-            using (var fileStream = new FileStream(outputPath, FileMode.Create))
+            using (var fileStream = new FileStream(outputPath, FileMode.Create, FileAccess.Write, FileShare.None, 1048576))
             {
                 var latin1 = Encoding.GetEncoding("ISO-8859-1");
 
