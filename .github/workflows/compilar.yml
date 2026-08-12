@@ -1,4 +1,4 @@
-name: Compilar FPKGi Modificado
+name: Compilar FPKGi
 
 on:
   push:
