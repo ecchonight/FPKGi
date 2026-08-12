@@ -1,4 +1,4 @@
-name: Compilar FPKGi Modificado em PKG
+name: Compilar FPKGi Otimizado
 
 on:
   push:
@@ -16,21 +16,14 @@ jobs:
       - name: Baixar Codigo do Repositorio
         uses: actions/checkout@v4
 
-      - name: Configurar Ferramentas do PlayStation
+      - name: Compilar Codigo de Escrita
         run: |
-          mkdir BuildPKG
-          # Baixa o compilador nativo simplificado de código para Homebrew de Console
-          dotnet tool install -g Amazon.Lambda.Tools --integrity-check-skip true
-
-      - name: Injetar Codigo e Compilar PKG
-        run: |
-          & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe" /target:library /out:BuildPKG/Assembly-CSharp.dll /recurse:*filehandlers.cs /nowarn:0246,0103,0234,0117
-          # O script cria uma estrutura falsa de PKG apenas para encapsular os seus 4MB de forma legivel para o PS5
-          echo "PKG Estruturado" > BuildPKG/fpkgi_modificado.pkg
+          mkdir Saida
+          & "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe" /target:library /out:Saida/Assembly-CSharp.dll /recurse:*filehandlers.cs /nowarn:0246,0103,0234,0117
         continue-on-error: true
 
-      - name: Baixar o PKG Pronto para o PS5
+      - name: Entregar Arquivo para Download
         uses: actions/upload-artifact@v4
         with:
-          name: FPKGi-Instalador-PS5
-          path: BuildPKG/*.pkg
+          name: Componente-FPKGi-Rapido
+          path: Saida/Assembly-CSharp.dll
